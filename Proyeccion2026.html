@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pregunta Especial</title>
+
+<style>
+    body {
+        background: linear-gradient(to bottom, #ff758c, #ff7eb3);
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding-top: 80px;
+        overflow: hidden;
+        height: 100vh;
+    }
+
+    h1 {
+        font-size: 40px;
+        color: white;
+        margin-bottom: 40px;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .btn {
+        padding: 15px 30px;
+        font-size: 22px;
+        margin: 20px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        color: white;
+        transition: 0.2s;
+    }
+
+    #btnSi {
+        background-color: #28a745;
+    }
+
+    #btnNo {
+        background-color: #dc3545;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* corazones */
+    .corazon {
+        position: fixed;
+        color: white;
+        font-size: 30px;
+        animation: flotar 3s linear forwards;
+    }
+
+    @keyframes flotar {
+        0% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(-200px); opacity: 0; }
+    }
+
+</style>
+</head>
+<body onclick="activarMusica()">
+
+<h1 id="pregunta">¿QUIERES SER MI NOVIA?</h1>
+
+<button class="btn" id="btnSi">SÍ</button>
+<button class="btn" id="btnNo">NO</button>
+
+<!-- Música -->
+<audio id="musica" loop>
+    <source src="mision.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const musica = document.getElementById("musica");
+    let musicaActiva = false;
+
+    function activarMusica() {
+        if (!musicaActiva) {
+            musica.play().catch(()=>{});
+            musicaActiva = true;
+        }
+    }
+
+    // Botón SÍ
+    document.getElementById("btnSi").onclick = function() {
+        document.getElementById("pregunta").innerText = "¡Sabía que dirías que sí!";
+        lanzarConfeti();
+        lanzarCorazones();
+    };
+
+    // Botón NO (se mueve al tocarlo)
+    document.getElementById("btnNo").onclick = moverBoton;
+
+    function moverBoton() {
+        const btn = document.getElementById("btnNo");
+
+        let x = Math.random() * (window.innerWidth - 150);
+        let y = Math.random() * (window.innerHeight - 150);
+
+        btn.style.left = x + "px";
+        btn.style.top = y + "px";
+    }
+
+    // corazones
+    function lanzarCorazones() {
+        for (let i = 0; i < 20; i++) {
+            let corazon = document.createElement("div");
+            corazon.innerHTML = "❤";
+            corazon.classList.add("corazon");
+            corazon.style.left = Math.random() * window.innerWidth + "px";
+            corazon.style.bottom = "0px";
+            document.body.appendChild(corazon);
+
+            setTimeout(() => corazon.remove(), 3000);
+        }
+    }
+
+    // confeti simple
+    function lanzarConfeti() {
+        for (let i = 0; i < 50; i++) {
+            let confeti = document.createElement("div");
+            confeti.style.position = "fixed";
+            confeti.style.width = "10px";
+            confeti.style.height = "10px";
+            confeti.style.background = "white";
+            confeti.style.left = Math.random() * window.innerWidth + "px";
+            confeti.style.top = "-20px";
+            confeti.style.opacity = "0.9";
+            confeti.style.borderRadius = "2px";
+            confeti.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
+            confeti.style.animation = "caer 2s linear forwards";
+
+            document.body.appendChild(confeti);
+
+            setTimeout(() => confeti.remove(), 2000);
+        }
+    }
+
+    // animación del confeti
+    const style = document.createElement("style");
+    style.innerHTML = `
+        @keyframes caer {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+
+</body>
+</html>
